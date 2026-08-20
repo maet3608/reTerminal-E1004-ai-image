@@ -65,11 +65,11 @@ wake:
 
 ## Links
 
-[reTerminal E1004 Product](https://www.seeedstudio.com/reTerminal-E1004-p-6692.html)
-[Getting Started with reTerminal E1004](https://wiki.seeedstudio.com/getting_started_with_reterminal_e1004/)
-[Schematic reTerminal E1004](https://files.seeedstudio.com/wiki/reterminal_e10xx/res/202004523_reTerminal%20E1004_V1.0_SCH_260105.pdf)
-[Github](https://github.com/Seeed-Projects/OSHW-reTerminal-Series-E-D)
-[Github E1004](https://github.com/Seeed-Projects/OSHW-reTerminal-Series-E-D/blob/main/examples/base/GxEPD2_reTerminal_E1004/GxEPD2_reTerminal_E1004.ino)
+- [reTerminal E1004 Product](https://www.seeedstudio.com/reTerminal-E1004-p-6692.html)
+- [Getting Started with reTerminal E1004](https://wiki.seeedstudio.com/getting_started_with_reterminal_e1004/)
+- [Schematic reTerminal E1004](https://files.seeedstudio.com/wiki/reterminal_e10xx/res/202004523_reTerminal%20E1004_V1.0_SCH_260105.pdf)
+- [Github](https://github.com/Seeed-Projects/OSHW-reTerminal-Series-E-D)
+- [Github E1004](https://github.com/Seeed-Projects/OSHW-reTerminal-Series-E-D/blob/main/examples/base/GxEPD2_reTerminal_E1004/GxEPD2_reTerminal_E1004.ino)
 
 ## Display hardware
 
