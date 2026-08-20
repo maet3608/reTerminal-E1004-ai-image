@@ -1,0 +1,69 @@
+Processing reterminal_e1004 (platform: espressif32; board: seeed_xiao_esp32s3; framework: arduino)
+--------------------------------------------------------------------------------
+Verbose mode can be enabled via `-v, --verbose` option
+CONFIGURATION: https://docs.platformio.org/page/boards/espressif32/seeed_xiao_esp32s3.html
+PLATFORM: Espressif 32 (6.11.0) > Seeed Studio XIAO ESP32S3
+HARDWARE: ESP32S3 240MHz, 320KB RAM, 8MB Flash
+DEBUG: Current (cmsis-dap) External (cmsis-dap, esp-bridge, esp-builtin, esp-prog, iot-bus-jtag, jlink, minimodule, olimex-arm-usb-ocd, olimex-arm-usb-ocd-h, olimex-arm-usb-tiny-h, olimex-jtag-tiny, tumpa)
+PACKAGES: 
+ - framework-arduinoespressif32 @ 3.20017.241212+sha.dcc1105b 
+ - tool-esptoolpy @ 1.40501.0 (4.5.1) 
+ - toolchain-riscv32-esp @ 8.4.0+2021r2-patch5 
+ - toolchain-xtensa-esp32s3 @ 8.4.0+2021r2-patch5
+LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+LDF Modes: Finder ~ chain, Compatibility ~ soft
+Found 37 compatible libraries
+Scanning dependencies...
+Dependency Graph
+|-- Seeed_GFX @ 2.0.3+sha.a2de1ab
+|-- ArduinoJson @ 7.4.3
+|-- PNGdec @ 1.1.6
+|-- FS @ 2.0.0
+|-- SD @ 2.0.0
+|-- WiFi @ 2.0.0
+|-- WiFiClientSecure @ 2.0.0
+|-- palette_dither
+|-- Wire @ 2.0.0
+|-- HTTPClient @ 2.0.0
+Building in release mode
+Compiling .pio\build\reterminal_e1004\src\ai_image.cpp.o
+Compiling .pio\build\reterminal_e1004\src\battery.cpp.o
+Compiling .pio\build\reterminal_e1004\src\display_mgr.cpp.o
+Compiling .pio\build\reterminal_e1004\src\main.cpp.o
+Compiling .pio\build\reterminal_e1004\src\pipeline.cpp.o
+Compiling .pio\build\reterminal_e1004\src\prompt.cpp.o
+Compiling .pio\build\reterminal_e1004\src\sdcard_mgr.cpp.o
+Compiling .pio\build\reterminal_e1004\src\time_mgr.cpp.o
+Compiling .pio\build\reterminal_e1004\src\weather.cpp.o
+In file included from src/display_mgr.h:2,
+                 from src/main.cpp:10:
+.pio/libdeps/reterminal_e1004/Seeed_GFX/TFT_eSPI.h:1084:2: warning: #warning >>>>------>> TOUCH_CS pin not defined, TFT_eSPI touch functions will not be available! [-Wcpp]
+ #warning>>>>------>> TOUCH_CS pin not defined, TFT_eSPI touch functions will not be available!
+  ^~~~~~~
+In file included from src/display_mgr.h:2,
+                 from src/sdcard_mgr.cpp:5:
+.pio/libdeps/reterminal_e1004/Seeed_GFX/TFT_eSPI.h:1084:2: warning: #warning >>>>------>> TOUCH_CS pin not defined, TFT_eSPI touch functions will not be available! [-Wcpp]
+ #warning>>>>------>> TOUCH_CS pin not defined, TFT_eSPI touch functions will not be available!
+  ^~~~~~~
+In file included from src/display_mgr.h:2,
+                 from src/pipeline.cpp:4:
+.pio/libdeps/reterminal_e1004/Seeed_GFX/TFT_eSPI.h:1084:2: warning: #warning >>>>------>> TOUCH_CS pin not defined, TFT_eSPI touch functions will not be available! [-Wcpp]
+ #warning>>>>------>> TOUCH_CS pin not defined, TFT_eSPI touch functions will not be available!
+  ^~~~~~~
+In file included from src/display_mgr.h:2,
+                 from src/display_mgr.cpp:1:
+.pio/libdeps/reterminal_e1004/Seeed_GFX/TFT_eSPI.h:1084:2: warning: #warning >>>>------>> TOUCH_CS pin not defined, TFT_eSPI touch functions will not be available! [-Wcpp]
+ #warning>>>>------>> TOUCH_CS pin not defined, TFT_eSPI touch functions will not be available!
+  ^~~~~~~
+Linking .pio\build\reterminal_e1004\firmware.elf
+Retrieving maximum program size .pio\build\reterminal_e1004\firmware.elf
+Checking size .pio\build\reterminal_e1004\firmware.elf
+Advanced Memory Usage is available via "PlatformIO Home > Project Inspect"
+RAM:   [====      ]  35.4% (used 115876 bytes from 327680 bytes)
+Flash: [===       ]  32.3% (used 1078357 bytes from 3342336 bytes)
+Building .pio\build\reterminal_e1004\firmware.bin
+esptool.py v4.5.1
+Creating esp32s3 image...
+Merged 3 ELF sections
+Successfully created esp32s3 image.
+========================= [SUCCESS] Took 8.32 seconds =========================
