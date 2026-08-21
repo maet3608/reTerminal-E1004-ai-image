@@ -30,8 +30,8 @@ static const char *THEMES[7] = {
     "Wassily Kandinsky like style",       // Sunday
     "Japanese Ukiyo-e woodblock print",   // Monday
     "Japanese Anime, Totoro or Inuyasha", // Tuesday
-    "Vintage botanical illustration",     // Wednesday
-    "Steampunk style",                    // Thursday
+    "Steampunk style",                    // Wednesday
+    "Vintage botanical illustration",     // Thursday
     "Victorian city street",              // Friday
     "Piet Mondrian abstract art ",        // Saturday
 };
@@ -48,8 +48,7 @@ enum Orientation { ORIENT_PORTRAIT = 0,
 static const Orientation ORIENTATION = ORIENT_LANDSCAPE;
 
 // ---------------- AI image (OpenAI) ----------------
-// gpt-image-1 accepts non-square sizes; gpt-image-1-mini is 1024x1024 only.
-static const char *AI_MODEL = "gpt-image-1";
+static const char *AI_MODEL = "gpt-image-1-mini"; // "gpt-image-1" or "gpt-image-1-mini"
 // Match the panel orientation so less cropping is needed:
 //   portrait  -> 1024x1536,   landscape -> 1536x1024
 static const char *AI_SIZE = (ORIENTATION == ORIENT_LANDSCAPE) ? "1536x1024" : "1024x1536";
