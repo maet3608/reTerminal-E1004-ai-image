@@ -11,7 +11,9 @@ is resized, dithered to the panel's six colors, displayed — where it stays
 visible for the whole day **without consuming any power** — and the device
 returns to deep sleep until the next morning.
 
-The result is a "generative wall art" that looks different.
+The result is a "generative wall art" that looks different. For more detailed
+information see the [reTerminal E1004 13.3" 6-Color ePaper Display with AI-Generated Art](https://www.makerguides.com/reterminal-e1004-epaper-display-with-ai-generated-art/)
+article.
 
 ### How it works (the daily cycle)
 

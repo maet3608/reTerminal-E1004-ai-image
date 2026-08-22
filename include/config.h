@@ -38,7 +38,7 @@ static const char *THEMES[7] = {
 
 // ---------------- Battery ----------------
 static const float BAT_VOLTAGE_DIVIDER = 2.0f; // VBAT = ADC * 2
-static const int BAT_LOW_PERCENT = 5;          // skip the network cycle below this
+static const int BAT_LOW_PERCENT = 3;          // skip the network cycle below this
 
 // ---------------- Orientation ----------------
 // Global screen orientation. Portrait uses the panel natively; landscape
