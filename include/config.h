@@ -27,13 +27,13 @@ static const char *DATE_FORMAT = "%d %B %Y"; // e.g. "1 June 2026" (strftime)
 static const bool USE_WEEKDAY_THEMES = true;
 static const char *THEME = "Vintage botanical illustration";
 static const char *THEMES[7] = {
-    "Wassily Kandinsky like style",                                       // Sunday
-    "Japanese Ukiyo-e woodblock print",                                   // Monday
-    "Japanese Anime scene from Totoro or Inuyasha ",                      // Tuesday
-    "Steampunk style (city / person / detailed machine / complex robot)", // Wednesday
-    "Vintage botanical illustration",                                     // Thursday
-    "Victorian city street",                                              // Friday
-    "Piet Mondrian abstract art ",                                        // Saturday
+    "Wassily Kandinsky like style",     // Sunday
+    "Japanese Ukiyo-e woodblock print", // Monday
+    "Japanese Anime, Totoro scene",     // Tuesday
+    "Steampunk style scene",            // Wednesday
+    "Vintage botanical illustration",   // Thursday
+    "Victorian city street",            // Friday
+    "Piet Mondrian abstract art ",      // Saturday
 };
 
 // ---------------- Battery ----------------

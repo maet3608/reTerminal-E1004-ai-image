@@ -17,16 +17,17 @@ static bool isBase64Char(uint8_t c) {
 
 // Buffered character reader over an fs::File (avoids 1-byte reads).
 struct BufReader {
-  fs::File& f;
+  fs::File &f;
   uint8_t buf[2048];
   size_t pos;
   size_t len;
-  explicit BufReader(fs::File& file) : f(file), pos(0), len(0) {}
-  bool next(uint8_t& c) {
+  explicit BufReader(fs::File &file) : f(file), pos(0), len(0) {}
+  bool next(uint8_t &c) {
     if (pos >= len) {
       len = f.read(buf, sizeof(buf));
       pos = 0;
-      if (len == 0) return false;
+      if (len == 0)
+        return false;
     }
     c = buf[pos++];
     return true;
@@ -34,18 +35,20 @@ struct BufReader {
 };
 
 // Decode one base64 chunk (n must be a multiple of 4) and append to the file.
-static bool base64DecodeChunk(const uint8_t* b64, size_t n, fs::File& out) {
-  if (n % 4 != 0) return false;
-  static uint8_t tmp[3072];  // static: keep it off the (8 KB) loop-task stack
+static bool base64DecodeChunk(const uint8_t *b64, size_t n, fs::File &out) {
+  if (n % 4 != 0)
+    return false;
+  static uint8_t tmp[3072]; // static: keep it off the (8 KB) loop-task stack
   size_t olen = 0;
   const int rc = mbedtls_base64_decode(tmp, sizeof(tmp), &olen, b64, n);
-  if (rc != 0) return false;
+  if (rc != 0)
+    return false;
   return out.write(tmp, olen) == olen;
 }
 
 // Scan the JSON response for "b64_json":"..." and write the decoded PNG bytes
 // to png. The base64 payload is decoded in chunks (4 KB of chars -> 3 KB).
-static bool extractBase64ToFile(fs::File& json, fs::File& png) {
+static bool extractBase64ToFile(fs::File &json, fs::File &png) {
   BufReader r(json);
   // Phase 1: find the "b64_json" key (tolerant of "key":"..." and "key": "...").
   const char key[] = "\"b64_json\"";
@@ -55,7 +58,8 @@ static bool extractBase64ToFile(fs::File& json, fs::File& png) {
   while (r.next(c)) {
     if (c == (uint8_t)key[ki]) {
       ki++;
-      if (ki == klen) break;
+      if (ki == klen)
+        break;
     } else {
       ki = (c == (uint8_t)key[0]) ? 1 : 0;
     }
@@ -79,10 +83,11 @@ static bool extractBase64ToFile(fs::File& json, fs::File& png) {
   }
 
   // Phase 3: decode base64 chars up to the closing quote.
-  static uint8_t b64[4096];  // static: keep it off the (8 KB) loop-task stack
+  static uint8_t b64[4096]; // static: keep it off the (8 KB) loop-task stack
   size_t bi = 0;
   while (r.next(c)) {
-    if (c == '"') break;  // end of the b64_json value
+    if (c == '"')
+      break; // end of the b64_json value
     if (isBase64Char(c)) {
       b64[bi++] = c;
       if (bi == sizeof(b64)) {
@@ -104,11 +109,13 @@ static bool extractBase64ToFile(fs::File& json, fs::File& png) {
 
 // Read a single byte from the TLS client, yielding while no data is buffered.
 // Returns the byte, or -1 on connection close / deadline.
-static int readByte(WiFiClientSecure& client, unsigned long deadline) {
+static int readByte(WiFiClientSecure &client, unsigned long deadline) {
   while (millis() < deadline) {
     const int c = client.read();
-    if (c >= 0) return c;
-    if (!client.connected() && client.available() == 0) return -1;
+    if (c >= 0)
+      return c;
+    if (!client.connected() && client.available() == 0)
+      return -1;
     delay(5);
   }
   return -1;
@@ -116,12 +123,14 @@ static int readByte(WiFiClientSecure& client, unsigned long deadline) {
 
 // Read one CR/LF-terminated line from the client into `line`. Returns true if
 // any data was received (a blank line yields an empty string).
-static bool readLine(WiFiClientSecure& client, String& line, unsigned long deadline) {
+static bool readLine(WiFiClientSecure &client, String &line, unsigned long deadline) {
   line = "";
   while (millis() < deadline) {
     const int c = readByte(client, deadline);
-    if (c < 0) return line.length() > 0;
-    if (c == '\n') return true;
+    if (c < 0)
+      return line.length() > 0;
+    if (c == '\n')
+      return true;
     line += (char)c;
   }
   return line.length() > 0;
@@ -130,29 +139,31 @@ static bool readLine(WiFiClientSecure& client, String& line, unsigned long deadl
 // Read up to `want` bytes from the client and append them to `out`. Uses a
 // static buffer to keep it off the (8 KB) loop-task stack. Returns the number
 // of bytes written, or -1 on connection close / deadline.
-static int readSome(WiFiClientSecure& client, fs::File& out, size_t want,
+static int readSome(WiFiClientSecure &client, fs::File &out, size_t want,
                     unsigned long deadline) {
-  static uint8_t buf[2048];  // static: keep it off the (8 KB) loop-task stack
-  if (want > sizeof(buf)) want = sizeof(buf);
+  static uint8_t buf[2048]; // static: keep it off the (8 KB) loop-task stack
+  if (want > sizeof(buf))
+    want = sizeof(buf);
   while (millis() < deadline) {
     const int n = client.read(buf, want);
     if (n > 0) {
       out.write(buf, n);
       return n;
     }
-    if (!client.connected() && client.available() == 0) return -1;
+    if (!client.connected() && client.available() == 0)
+      return -1;
     delay(10);
   }
   return -1;
 }
 
-bool aiGenerateImage(const String& prompt) {
+bool aiGenerateImage(const String &prompt) {
   // --- Build the JSON request body ---
   String escaped = prompt;
-  escaped.replace("\\", "\\\\");   // backslash -> \\ (JSON)
-  escaped.replace("\"", "\\\"");   // quote     -> \"
-  escaped.replace("\n", "\\n");    // newline   -> \n
-  escaped.replace("\r", "");       // strip CR
+  escaped.replace("\\", "\\\\"); // backslash -> \\ (JSON)
+  escaped.replace("\"", "\\\""); // quote     -> \"
+  escaped.replace("\n", "\\n");  // newline   -> \n
+  escaped.replace("\r", "");     // strip CR
 
   String body = "{\"model\":\"";
   body += AI_MODEL;
@@ -172,10 +183,6 @@ bool aiGenerateImage(const String& prompt) {
   const uint32_t timeoutSec = (uint32_t)(timeoutMs / 1000UL);
 
   // --- Send the request over a raw TLS connection ---
-  // HTTPClient::setTimeout() takes a uint16_t and its connect() path clamps
-  // the socket timeout to ~65 s, which is too short for gpt-image-1.
-  // WiFiClientSecure::setTimeout() takes seconds (uint32_t), so the full
-  // AI_TIMEOUT_MS (120 s) is honored for real.
   for (int attempt = 1; attempt <= AI_MAX_ATTEMPTS; attempt++) {
     if (attempt > 1) {
       LOG.printf("[AI] retry %d/%d in %lu ms\n", attempt, AI_MAX_ATTEMPTS,
@@ -185,7 +192,7 @@ bool aiGenerateImage(const String& prompt) {
 
     WiFiClientSecure client;
     client.setInsecure();
-    client.setTimeout(timeoutSec);  // read + connect/handshake timeout
+    client.setTimeout(timeoutSec); // read + connect/handshake timeout
 
     LOG.printf("[AI] attempt %d/%d POST /v1/images/generations ...\n",
                attempt, AI_MAX_ATTEMPTS);
@@ -208,9 +215,10 @@ bool aiGenerateImage(const String& prompt) {
 
     size_t sent = 0;
     while (sent < req.length()) {
-      const size_t n = client.write((const uint8_t*)req.c_str() + sent,
+      const size_t n = client.write((const uint8_t *)req.c_str() + sent,
                                     req.length() - sent);
-      if (n == 0) break;
+      if (n == 0)
+        break;
       sent += n;
     }
     if (sent != req.length()) {
@@ -228,7 +236,8 @@ bool aiGenerateImage(const String& prompt) {
 
     while (millis() < headerDeadline) {
       String line;
-      if (!readLine(client, line, headerDeadline)) break;
+      if (!readLine(client, line, headerDeadline))
+        break;
       line.trim();
       if (firstLine) {
         firstLine = false;
@@ -238,9 +247,10 @@ bool aiGenerateImage(const String& prompt) {
           httpCode = line.substring(sp1 + 1, sp2 > 0 ? sp2 : line.length()).toInt();
         }
         LOG.printf("[AI] HTTP %d\n", httpCode);
-        if (httpCode == 0) break;
+        if (httpCode == 0)
+          break;
       } else if (line.length() == 0) {
-        break;  // end of headers
+        break; // end of headers
       } else {
         const int colon = line.indexOf(':');
         if (colon > 0) {
@@ -278,10 +288,12 @@ bool aiGenerateImage(const String& prompt) {
           delay(5);
         }
       }
-      if (err.length() > 0) LOG.printf("[AI] error body: %s\n", err.c_str());
+      if (err.length() > 0)
+        LOG.printf("[AI] error body: %s\n", err.c_str());
       client.stop();
       // 4xx (bad request / auth / quota / rate limit) will not improve on retry.
-      if (httpCode >= 400 && httpCode < 500) break;
+      if (httpCode >= 400 && httpCode < 500)
+        break;
       continue;
     }
 
@@ -300,29 +312,37 @@ bool aiGenerateImage(const String& prompt) {
       // Transfer-Encoding: chunked - decode the framing while streaming.
       while (millis() < bodyDeadline) {
         String sizeLine;
-        if (!readLine(client, sizeLine, bodyDeadline)) break;
+        if (!readLine(client, sizeLine, bodyDeadline))
+          break;
         sizeLine.trim();
-        if (sizeLine.length() == 0) continue;
+        if (sizeLine.length() == 0)
+          continue;
         const int semi = sizeLine.indexOf(';');
-        if (semi >= 0) sizeLine = sizeLine.substring(0, semi);
+        if (semi >= 0)
+          sizeLine = sizeLine.substring(0, semi);
         const long chunkLen = strtol(sizeLine.c_str(), nullptr, 16);
-        if (chunkLen <= 0) break;  // terminating 0-length chunk
+        if (chunkLen <= 0)
+          break; // terminating 0-length chunk
         long left = chunkLen;
         while (left > 0) {
           const int n = readSome(client, resp, (size_t)left, bodyDeadline);
-          if (n <= 0) break;
+          if (n <= 0)
+            break;
           total += n;
           left -= n;
         }
-        if (left > 0) break;  // chunk was truncated
-        for (int i = 0; i < 2; i++) readByte(client, bodyDeadline);  // trailing CRLF
+        if (left > 0)
+          break; // chunk was truncated
+        for (int i = 0; i < 2; i++)
+          readByte(client, bodyDeadline); // trailing CRLF
       }
     } else if (contentLength >= 0) {
       // Content-Length: read exactly that many bytes.
       long left = contentLength;
       while (left > 0) {
         const int n = readSome(client, resp, (size_t)left, bodyDeadline);
-        if (n <= 0) break;
+        if (n <= 0)
+          break;
         total += n;
         left -= n;
       }
@@ -330,7 +350,8 @@ bool aiGenerateImage(const String& prompt) {
       // No framing headers: read until the server closes (Connection: close).
       while (true) {
         const int n = readSome(client, resp, 2048, bodyDeadline);
-        if (n <= 0) break;
+        if (n <= 0)
+          break;
         total += n;
       }
     }
@@ -348,24 +369,29 @@ bool aiGenerateImage(const String& prompt) {
     fs::File png = SD.open(SD_TMP_PNG, FILE_WRITE);
     bool ok = false;
     if (js && png) {
-      // Debug: dump the head of the JSON response to diagnose b64_json
-      // parsing. Gated behind AI_DEBUG_DUMP (config.h).
       if (AI_DEBUG_DUMP) {
         uint8_t head[256];
         const int hn = js.read(head, sizeof(head) - 1);
-        if (hn > 0) head[hn] = 0; else head[0] = 0;
-        LOG.printf("[AI] response head: %s\n", (const char*)head);
-        js.seek(0);  // rewind for extractBase64ToFile
+        if (hn > 0)
+          head[hn] = 0;
+        else
+          head[0] = 0;
+        LOG.printf("[AI] response head: %s\n", (const char *)head);
+        js.seek(0); // rewind for extractBase64ToFile
       }
       ok = extractBase64ToFile(js, png);
     } else {
       LOG.println("[AI] cannot open temp files");
     }
-    if (js) js.close();
-    if (png) png.close();
+    if (js)
+      js.close();
+    if (png)
+      png.close();
     sdDelete(SD_TMP_RESP);
-    if (!ok) sdDelete(SD_TMP_PNG);
-    if (ok) return true;
+    if (!ok)
+      sdDelete(SD_TMP_PNG);
+    if (ok)
+      return true;
 
     LOG.println("[AI] response parsing failed - retrying.");
   }
