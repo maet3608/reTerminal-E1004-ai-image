@@ -15,7 +15,14 @@ The result is a "generative wall art" that looks different. For more detailed
 information see the [reTerminal E1004 13.3" 6-Color ePaper Display with AI-Generated Art](https://www.makerguides.com/reterminal-e1004-epaper-display-with-ai-generated-art/)
 article.
 
-### How it works (the daily cycle)
+
+## Compile and Upload via Command Line
+
+```
+pio run -d c:/Users/stefa/Desktop/seeed-reterminal-E1004/reTerminal-E1004-ai-image -e reterminal_e1004 -t upload --upload-port COM7
+```
+
+## How it works (the daily cycle)
 
 Each run follows a fixed sequence. On any failure a full-screen error message
 is drawn on the panel and the device goes back to sleep to retry at the next
